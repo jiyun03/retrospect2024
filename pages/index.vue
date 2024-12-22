@@ -1,7 +1,7 @@
 <template>
   <div v-if="isMounted" class="pt-10">
-    <!-- intro -->
-    <div v-if="localStep === 'intro'" class="font-neodgm text-center">
+    <!-- localStep : intro -->
+    <div v-if="localStep === STEP.INTRO" class="font-neodgm text-center">
       <NuxtImg src="/img/decoration.png" class="mx-auto mb-4 w-20" />
       <h1 class="text-7xl">Goodbye<br />2024</h1>
       <button
@@ -12,11 +12,9 @@
         Start
       </button>
     </div>
-    <!-- question -->
-    <div v-else-if="localStep === 'question'" class="w-full p-10 text-center">
-      <!-- 네비게이션 -->
+    <!-- localStep : question -->
+    <div v-else-if="localStep === STEP.QUESTION" class="w-full p-10 text-center">
       <Navigation :questionDialogues="questionDialogues" :localQuestionStep="localQuestionStep" :handleNext="handleNext" />
-      <!-- question -->
       <Question
         :localQuestionStep="localQuestionStep"
         :questionDialogues="questionDialogues"
@@ -37,18 +35,24 @@
 </template>
 
 <script setup lang="ts">
+// type
+enum STEP {
+  INTRO = 'intro',
+  QUESTION = 'question',
+}
+
+type Answer = {
+  [key: number]: string | null
+}
+
+// 상태
 const isMounted = ref(false)
 const isTyping = ref(false) // 타이핑 중인지 확인
 const currentText = ref('') // 현재 출력 중인 텍스트
 const currentIndex = ref(0) // 현재 대사 인덱스
 const typingInterval = ref<NodeJS.Timeout | null>(null) // 타이핑 타이머
-const localStep = ref<string | null>('') // intro, question, end
+const localStep = ref<STEP | null>(null)
 const localQuestionStep = ref<string | null>('0')
-
-// type
-type Answer = {
-  [key: number]: string | null
-}
 
 // intro
 const introDialogues = [
@@ -91,7 +95,7 @@ const answer = ref(answerDefault)
 
 // start
 const onStart = () => {
-  localStep.value = 'question'
+  localStep.value = STEP.QUESTION
   localQuestionStep.value = '1'
   typeDialogue(questionDialogues[0])
 }
@@ -129,7 +133,8 @@ const showFullDialogue = () => {
   if (typingInterval.value) {
     clearInterval(typingInterval.value)
   }
-  currentText.value = localStep.value === 'intro' ? introDialogues[currentIndex.value] : questionDialogues[Number(localQuestionStep.value)]
+  currentText.value =
+    localStep.value === STEP.INTRO ? introDialogues[currentIndex.value] : questionDialogues[Number(localQuestionStep.value)]
   isTyping.value = false
 }
 
@@ -139,18 +144,18 @@ const handleNext = (step?: number) => {
     // 타이핑 중이면 전체 대사 출력
     showFullDialogue()
   } else {
-    if (localStep.value === 'intro') {
+    if (localStep.value === STEP.INTRO) {
       // 키보드나 마우스 입력으로 넘어가게
       currentIndex.value++
       if (currentIndex.value < introDialogues.length) {
         typeDialogue(introDialogues[currentIndex.value])
       }
-    } else if (localStep.value === 'question') {
+    } else if (localStep.value === STEP.QUESTION) {
       // 버튼 클릭으로 넘어가게
       if (step) {
         console.log(step)
         const stepString = String(step)
-        localStorage.setItem('currentStep', 'question')
+        localStorage.setItem('currentStep', STEP.QUESTION)
         localStorage.setItem('questionStep', stepString)
         localQuestionStep.value = stepString
         typeDialogue(questionDialogues[Number(step) - 1])
@@ -162,7 +167,7 @@ const handleNext = (step?: number) => {
 // 키보드, 마우스 이벤트 핸들러
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key === ' ') {
-    if (localStep.value === 'intro' && currentIndex.value < introDialogues.length) {
+    if (localStep.value === STEP.INTRO && currentIndex.value < introDialogues.length) {
       handleNext()
       console.log('키보드')
     }
@@ -170,7 +175,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
 }
 
 const handleRightClick = () => {
-  if (localStep.value === 'intro' && currentIndex.value < introDialogues.length) {
+  if (localStep.value === STEP.INTRO && currentIndex.value < introDialogues.length) {
     handleNext()
     console.log('클릭')
   }
@@ -181,14 +186,14 @@ onMounted(() => {
   isMounted.value = true
 
   // 로컬스토리지 스텝 상태
-  localStep.value = localStorage.getItem('currentStep')
+  localStep.value = localStorage.getItem('currentStep') as STEP
   localQuestionStep.value = localStorage.getItem('questionStep')
 
   if (localStep.value) {
-    if (localStep.value === 'intro') {
+    if (localStep.value === STEP.INTRO) {
       // intro 대사 출력
       typeDialogue(introDialogues[currentIndex.value])
-    } else if (localStep.value === 'question') {
+    } else if (localStep.value === STEP.QUESTION) {
       // question 대사 출력
       typeDialogue(questionDialogues[Number(localQuestionStep.value) - 1])
       const storedAnswers = localStorage.getItem('answers')
@@ -199,8 +204,8 @@ onMounted(() => {
       }
     }
   } else {
-    localStorage.setItem('currentStep', 'intro')
-    localStep.value = localStorage.getItem('currentStep')
+    localStorage.setItem('currentStep', STEP.INTRO)
+    localStep.value = localStorage.getItem('currentStep') as STEP
     typeDialogue(introDialogues[currentIndex.value])
   }
 
