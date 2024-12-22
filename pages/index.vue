@@ -13,13 +13,9 @@
       </button>
     </div>
     <!-- question -->
-    <div v-else-if="localStep === 'question'" class="w-full px-10 text-center">
+    <div v-else-if="localStep === 'question'" class="w-full p-10 text-center">
       <!-- 네비게이션 -->
-      <div class="font-neodgm flex gap-2">
-        <div v-for="(item, idx) in questionDialogues" :key="item" class="h-3 w-2/3 bg-black" @click="onStepMove(idx + 1)">
-          {{ idx + 1 }}
-        </div>
-      </div>
+      <Navigation :questionDialogues="questionDialogues" :localQuestionStep="localQuestionStep" :onStepMove="onStepMove" />
       <!-- question -->
       <h1 class="font-neodgm mb-5 text-7xl">Q {{ localQuestionStep }}</h1>
       <textarea
@@ -46,10 +42,12 @@
       </div>
     </div>
     <!-- 하단 -->
-    <div class="absolute bottom-0 w-full">
-      <TextDialogue :currentText="currentText" />
-      <!-- 이미지 -->
-      <div class="h-16 bg-contain bg-center bg-repeat-x" style="background-image: url('/img/decoration_tree.png')"></div>
+    <div class="min-h-[24rem]">
+      <div class="absolute bottom-0 w-full">
+        <TextDialogue :currentText="currentText" />
+        <!-- 이미지 -->
+        <div class="h-16 bg-contain bg-center bg-repeat-x" style="background-image: url('/img/decoration_tree.png')"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -106,16 +104,6 @@ const answerDefault = questionDialogues.reduce((acc, _, index) => {
   return acc
 }, {} as Answer)
 const answer = ref(answerDefault)
-
-// 값이 null이 아닌지 확인하는 함수
-const hasNonNullValue = () => {
-  const storedAnswers = localStorage.getItem('answers')
-  if (storedAnswers) {
-    console.log(Object.values(JSON.parse(storedAnswers)))
-    return Object.values(JSON.parse(storedAnswers)).some((value) => value !== '') && Object.values(answer).some((value) => value !== '')
-  }
-  return false
-}
 
 // start
 const onStart = () => {
