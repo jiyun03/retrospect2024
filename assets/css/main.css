@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html {
+    @apply text-white;
+  }
+}
+
 @layer components {
   /* animate */
   @keyframes rotateLeftRight {
