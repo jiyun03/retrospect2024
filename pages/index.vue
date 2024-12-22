@@ -14,14 +14,8 @@
     </div>
     <!-- localStep : question -->
     <div v-else-if="localStep === STEP.QUESTION" class="w-full p-10 text-center">
-      <Navigation :questionDialogues="questionDialogues" :localQuestionStep="localQuestionStep" :handleNext="handleNext" />
-      <Question
-        :localQuestionStep="localQuestionStep"
-        :questionDialogues="questionDialogues"
-        :answer="answer"
-        :handleAnswerChange="handleAnswerChange"
-        :handleNext="handleNext"
-      />
+      <Navigation :localQuestionStep="localQuestionStep" :handleNext="handleNext" />
+      <Question :localQuestionStep="localQuestionStep" :answer="answer" :handleAnswerChange="handleAnswerChange" :handleNext="handleNext" />
     </div>
     <!-- 하단 -->
     <div class="min-h-[24rem]">
@@ -35,6 +29,8 @@
 </template>
 
 <script setup lang="ts">
+import { questionLists } from '@/utils/question'
+
 // type
 enum STEP {
   INTRO = 'intro',
@@ -42,7 +38,7 @@ enum STEP {
 }
 
 type Answer = {
-  [key: number]: string | null
+  [key: number]: string
 }
 
 // 상태
@@ -59,35 +55,11 @@ const introDialogues = [
   '안녕? 2024 연말 회고 작성해보지 않을래?',
   '총 20가지의 질문을 준비해봤어, 답하고 싶지 않은 질문은 넘어갈 수도 있으니까, 원하는 질문에만 답을 해도 좋아!',
   '페이지에서 벗어나도 이어서 작성할 수 있게 답변을 저장해둘게 답변은 입력할 때 자동으로 저장이 돼, 사용자의 브라우저에만 저장하니까 답변 유출에 대한 걱정은 하지 않아도 돼!',
-  '답변을 제출하면 이미지로 저장하고 다른 사람들에게 공유도 할 수 있어, 그럼 즐거운 시간 되길!',
-]
-
-// question
-const questionDialogues = [
-  '질문 1...',
-  '질문 2...',
-  '질문 3...',
-  '질문 4...',
-  '질문 5...',
-  '질문 6...',
-  '질문 7...',
-  '질문 8...',
-  '질문 9...',
-  '질문 10...',
-  '질문 11...',
-  '질문 12...',
-  '질문 13...',
-  '질문 14...',
-  '질문 15...',
-  '질문 16...',
-  '질문 17...',
-  '질문 18...',
-  '질문 19...',
-  '질문 20...',
+  '답변을 제출하면 이미지로 저장해서 다른 사람들에게 공유 할 수 있어, 그럼 즐거운 시간 되길!',
 ]
 
 // answer 배열
-const answerDefault = questionDialogues.reduce((acc, _, index) => {
+const answerDefault = questionLists.reduce((acc, _, index) => {
   acc[index + 1] = ''
   return acc
 }, {} as Answer)
@@ -97,7 +69,7 @@ const answer = ref(answerDefault)
 const onStart = () => {
   localStep.value = STEP.QUESTION
   localQuestionStep.value = '1'
-  typeDialogue(questionDialogues[0])
+  typeDialogue(questionLists[0])
 }
 
 // 대사 타이핑
@@ -127,7 +99,6 @@ const handleAnswerChange = (questionNumber: number, event: Event) => {
     localStorage.setItem('answers', JSON.stringify(answer.value))
     if (localStorage.getItem('currentStep') === STEP.INTRO) {
       localStorage.setItem('currentStep', STEP.QUESTION)
-      console.log('tset')
     }
     if (localStorage.getItem('questionStep') !== String(questionNumber)) {
       localStorage.setItem('questionStep', String(questionNumber))
@@ -141,7 +112,7 @@ const showFullDialogue = () => {
     clearInterval(typingInterval.value)
   }
   currentText.value =
-    localStep.value === STEP.INTRO ? introDialogues[currentIndex.value] : questionDialogues[Number(localQuestionStep.value)]
+    localStep.value === STEP.INTRO ? introDialogues[currentIndex.value] : questionLists[Number(localQuestionStep.value) - 1]
   isTyping.value = false
 }
 
@@ -163,7 +134,7 @@ const handleNext = (step?: number) => {
         const stepString = String(step)
         localStorage.setItem('questionStep', stepString)
         localQuestionStep.value = stepString
-        typeDialogue(questionDialogues[Number(step) - 1])
+        typeDialogue(questionLists[step - 1])
       }
     }
   }
@@ -205,7 +176,7 @@ onMounted(() => {
         localQuestionStep.value = '1'
       }
       // question 대사 출력
-      typeDialogue(questionDialogues[Number(localQuestionStep.value) - 1])
+      typeDialogue(questionLists[Number(localQuestionStep.value) - 1])
       const storedAnswers = localStorage.getItem('answers')
       if (storedAnswers) {
         answer.value = JSON.parse(storedAnswers) as Answer

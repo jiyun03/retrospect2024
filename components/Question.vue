@@ -1,8 +1,13 @@
 <template>
-  <h1 class="font-neodgm mb-5 text-7xl">Q {{ localQuestionStep }}</h1>
+  <div class="relative mb-5">
+    <h1 class="font-neodgm text-7xl">Q {{ localQuestionStep }}</h1>
+    <div class="font-neodgm absolute bottom-0 right-0">
+      <button @click="$router.push('/result')" class="ml-2 min-w-28 rounded-full border-2 p-2">결과보기</button>
+    </div>
+  </div>
   <textarea
     rows="10"
-    :placeholder="questionDialogues[Number(localQuestionStep) - 1]"
+    :placeholder="questionLists[Number(localQuestionStep) - 1]"
     class="w-full resize-none rounded-lg p-5 text-lg text-black"
     :value="localQuestionStep && answer[Number(localQuestionStep)]"
     @input="(event) => handleAnswerChange(Number(localQuestionStep), event)"
@@ -16,7 +21,7 @@
       이전질문
     </button>
     <button
-      v-if="localQuestionStep !== String(questionDialogues.length)"
+      v-if="localQuestionStep !== String(questionLists.length)"
       class="rounded-full border-4 p-3 px-10 transition-[background] hover:bg-white/30 disabled:bg-blue-950 disabled:opacity-70"
       @click="handleNext(Number(localQuestionStep) + 1)"
     >
@@ -27,15 +32,14 @@
 
 <script setup lang="ts">
 import { defineProps } from 'vue'
+import { questionLists } from '@/utils/question'
 
 type Props = {
   localQuestionStep: string | null
-  questionDialogues: string[]
   answer: Record<number, string | null>
   handleAnswerChange: (step: number, event: Event) => void
   handleNext: (step: number) => void
 }
 
-// Props 선언
 const props = defineProps<Props>()
 </script>
