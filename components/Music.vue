@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed bottom-5 left-5">
+  <div class="fixed right-5 top-5 xl:bottom-5 xl:left-5 xl:right-auto xl:top-auto">
     <audio ref="bgAudio" autoplay loop>
       <source src="/audio/christmas.mp3" type="audio/mpeg" />
     </audio>

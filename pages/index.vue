@@ -1,19 +1,19 @@
 <template>
-  <div v-if="isMounted" class="pt-10">
+  <div v-if="isMounted" class="pt-16 md:pt-10">
     <!-- localStep : intro -->
     <div v-if="localStep === STEP.INTRO" class="font-neodgm text-center">
       <NuxtImg src="/img/decoration.png" class="mx-auto mb-4 w-20" />
       <h1 class="text-7xl">Goodbye<br />2024</h1>
       <button
         v-if="currentIndex >= introDialogues.length - 1 && !isTyping"
-        class="mt-5 rounded-full border-4 p-3 px-10 text-3xl leading-none transition-[background] hover:bg-white/30"
+        class="mt-5 rounded-full border-4 p-3 px-5 text-3xl leading-none transition-[background] hover:bg-white/30 md:px-10"
         @click="onStart"
       >
         Start
       </button>
     </div>
     <!-- localStep : question -->
-    <div v-else-if="localStep === STEP.QUESTION" class="w-full p-10 text-center">
+    <div v-else-if="localStep === STEP.QUESTION" class="w-full p-5 text-center md:p-10">
       <Navigation :localQuestionStep="localQuestionStep" :handleNext="handleNext" />
       <Question :localQuestionStep="localQuestionStep" :answer="answer" :handleAnswerChange="handleAnswerChange" :handleNext="handleNext" />
     </div>
@@ -52,10 +52,10 @@ const localQuestionStep = ref<string | null>('0')
 
 // intro
 const introDialogues = [
-  '안녕? 2024 연말 회고 작성해보지 않을래?',
-  '총 20가지의 질문을 준비해봤어, 답하고 싶지 않은 질문은 넘어갈 수도 있으니까, 원하는 질문에만 답을 해도 좋아!',
+  '안녕? 2024 연말 회고 작성해 보지 않을래?',
+  '총 20가지의 질문을 준비해 봤어, 답하고 싶지 않은 질문은 넘어갈 수도 있으니까, 원하는 질문에만 답을 해도 좋아!',
   '페이지에서 벗어나도 이어서 작성할 수 있게 답변을 저장해둘게 답변은 입력할 때 자동으로 저장이 돼, 사용자의 브라우저에만 저장하니까 답변 유출에 대한 걱정은 하지 않아도 돼!',
-  '답변을 제출하면 이미지로 저장해서 다른 사람들에게 공유 할 수 있어, 그럼 즐거운 시간 되길!',
+  '답변을 제출하면 이미지로 저장해서 다른 사람들과 공유할 수 있어, 그럼 즐거운 시간 되길!',
 ]
 
 // answer 배열

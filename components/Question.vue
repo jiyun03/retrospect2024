@@ -14,7 +14,7 @@
   />
   <div class="font-neodgm mt-5 flex justify-center gap-5 text-2xl">
     <button
-      class="rounded-full border-4 p-3 px-10 transition-[background] hover:bg-white/30 disabled:bg-blue-950 disabled:opacity-70"
+      class="w-2/4 rounded-full border-4 p-3 transition-[background] hover:bg-white/30 disabled:bg-blue-950 disabled:opacity-70 md:w-auto md:px-10"
       @click="handleNext(Number(localQuestionStep) - 1)"
       :disabled="localQuestionStep === '1'"
     >
@@ -22,7 +22,7 @@
     </button>
     <button
       v-if="localQuestionStep !== String(questionLists.length)"
-      class="rounded-full border-4 p-3 px-10 transition-[background] hover:bg-white/30 disabled:bg-blue-950 disabled:opacity-70"
+      class="w-2/4 rounded-full border-4 p-3 transition-[background] hover:bg-white/30 disabled:bg-blue-950 disabled:opacity-70 md:w-auto md:px-10"
       @click="handleNext(Number(localQuestionStep) + 1)"
     >
       다음질문
