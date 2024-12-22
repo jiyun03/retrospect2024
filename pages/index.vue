@@ -145,7 +145,6 @@ const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key === ' ') {
     if (localStep.value === STEP.INTRO && currentIndex.value < introDialogues.length) {
       handleNext()
-      console.log('키보드')
     }
   }
 }
@@ -153,7 +152,6 @@ const handleKeyDown = (event: KeyboardEvent) => {
 const handleRightClick = () => {
   if (localStep.value === STEP.INTRO && currentIndex.value < introDialogues.length) {
     handleNext()
-    console.log('클릭')
   }
 }
 

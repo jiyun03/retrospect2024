@@ -1,7 +1,7 @@
 <template>
   <div class="relative mb-5">
     <h1 class="font-neodgm text-7xl">Q {{ localQuestionStep }}</h1>
-    <div class="font-neodgm absolute bottom-0 right-0">
+    <div v-if="Object.values(answer).some((el) => el !== '')" class="font-neodgm absolute bottom-0 right-0">
       <button @click="$router.push('/result')" class="ml-2 min-w-28 rounded-full border-2 p-2">결과보기</button>
     </div>
   </div>
