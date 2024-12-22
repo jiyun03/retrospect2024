@@ -9,8 +9,8 @@
   </div>
 </template>
 
-<script setup>
-const bgAudio = ref(null)
+<script setup lang="ts">
+const bgAudio = ref<HTMLAudioElement | null>(null)
 const isPlaying = ref(false)
 
 // 음악 재생
@@ -20,7 +20,9 @@ const toggleMusic = () => {
     if (isPlaying.value) {
       audio.pause()
     } else {
-      audio.play()
+      audio.play().catch((err) => {
+        console.error('Audio play error:', err)
+      })
     }
     isPlaying.value = !isPlaying.value
   }

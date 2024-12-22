@@ -15,31 +15,15 @@
     <!-- question -->
     <div v-else-if="localStep === 'question'" class="w-full p-10 text-center">
       <!-- 네비게이션 -->
-      <Navigation :questionDialogues="questionDialogues" :localQuestionStep="localQuestionStep" :onStepMove="onStepMove" />
+      <Navigation :questionDialogues="questionDialogues" :localQuestionStep="localQuestionStep" :handleNext="handleNext" />
       <!-- question -->
-      <h1 class="font-neodgm mb-5 text-7xl">Q {{ localQuestionStep }}</h1>
-      <textarea
-        rows="10"
-        :placeholder="questionDialogues[Number(localQuestionStep) - 1]"
-        class="w-full resize-none rounded-lg p-5 text-lg text-black"
-        :value="localQuestionStep && answer[Number(localQuestionStep)]"
-        @input="(event) => handleAnswerChange(Number(localQuestionStep), event)"
+      <Question
+        :localQuestionStep="localQuestionStep"
+        :questionDialogues="questionDialogues"
+        :answer="answer"
+        :handleAnswerChange="handleAnswerChange"
+        :handleNext="handleNext"
       />
-      <div class="font-neodgm mt-5 flex justify-center gap-5">
-        <button
-          class="font-neodgm rounded-full border-4 p-3 px-10 text-right text-2xl transition-[background] hover:bg-white/30 disabled:bg-blue-950 disabled:opacity-70"
-          @click="onAnswer(Number(localQuestionStep) + 1)"
-          :disabled="!answer[Number(localQuestionStep)]"
-        >
-          답변제출
-        </button>
-        <button
-          class="rounded-full border-4 p-3 px-10 text-right text-2xl transition-[background] hover:bg-white/30 disabled:bg-blue-950 disabled:opacity-70"
-          @click="$router.push('/result')"
-        >
-          결과보기
-        </button>
-      </div>
     </div>
     <!-- 하단 -->
     <div class="min-h-[24rem]">
@@ -70,7 +54,7 @@ type Answer = {
 const introDialogues = [
   '안녕? 2024 연말 회고 작성해보지 않을래?',
   '총 20가지의 질문을 준비해봤어, 답하고 싶지 않은 질문은 넘어갈 수도 있으니까, 원하는 질문에만 답을 해도 좋아!',
-  '페이지에서 벗어나도 이어서 작성할 수 있게 답변을 저장해둘게, 사용자의 브라우저에만 저장하니까 답변 유출에 대한 걱정은 하지 않아도 돼!',
+  '페이지에서 벗어나도 이어서 작성할 수 있게 답변을 저장해둘게 답변은 입력할 때 자동으로 저장이 돼, 사용자의 브라우저에만 저장하니까 답변 유출에 대한 걱정은 하지 않아도 돼!',
   '답변을 제출하면 이미지로 저장하고 다른 사람들에게 공유도 할 수 있어, 그럼 즐거운 시간 되길!',
 ]
 
@@ -112,18 +96,6 @@ const onStart = () => {
   typeDialogue(questionDialogues[0])
 }
 
-// 네비게이션
-const onStepMove = (index: number) => {
-  console.log(index)
-  handleNext(index)
-}
-
-// 답변 제출
-const onAnswer = (index: number) => {
-  handleNext(index)
-  localStorage.setItem('answers', JSON.stringify(answer.value))
-}
-
 // 대사 타이핑
 const typeDialogue = (dialogue: string) => {
   let charIndex = 0
@@ -148,6 +120,7 @@ const handleAnswerChange = (questionNumber: number, event: Event) => {
   const target = event.target as HTMLTextAreaElement
   if (target) {
     answer.value[questionNumber] = target.value
+    localStorage.setItem('answers', JSON.stringify(answer.value))
   }
 }
 
