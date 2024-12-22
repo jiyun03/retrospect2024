@@ -4,7 +4,7 @@
       v-for="(item, idx) in questionDialogues"
       :key="item"
       :class="[
-        'w-[calc(10%-0.5rem)] rounded-lg bg-blue-950 p-1 shadow-sm',
+        'w-[calc(10%-0.5rem)] cursor-pointer rounded-lg bg-blue-950 p-1 shadow-sm',
         { 'bg-red-600': Number(localQuestionStep) === idx + 1 }, // idx와 localQuestionStep 비교 시 idx+1
       ]"
       @click="() => handleNext(idx + 1)"

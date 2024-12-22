@@ -125,6 +125,13 @@ const handleAnswerChange = (questionNumber: number, event: Event) => {
   if (target) {
     answer.value[questionNumber] = target.value
     localStorage.setItem('answers', JSON.stringify(answer.value))
+    if (localStorage.getItem('currentStep') === STEP.INTRO) {
+      localStorage.setItem('currentStep', STEP.QUESTION)
+      console.log('tset')
+    }
+    if (localStorage.getItem('questionStep') !== String(questionNumber)) {
+      localStorage.setItem('questionStep', String(questionNumber))
+    }
   }
 }
 
@@ -153,9 +160,7 @@ const handleNext = (step?: number) => {
     } else if (localStep.value === STEP.QUESTION) {
       // 버튼 클릭으로 넘어가게
       if (step) {
-        console.log(step)
         const stepString = String(step)
-        localStorage.setItem('currentStep', STEP.QUESTION)
         localStorage.setItem('questionStep', stepString)
         localQuestionStep.value = stepString
         typeDialogue(questionDialogues[Number(step) - 1])
@@ -187,13 +192,18 @@ onMounted(() => {
 
   // 로컬스토리지 스텝 상태
   localStep.value = localStorage.getItem('currentStep') as STEP
-  localQuestionStep.value = localStorage.getItem('questionStep')
+  localQuestionStep.value = localStorage.getItem('questionStep') && localStorage.getItem('questionStep')
 
   if (localStep.value) {
     if (localStep.value === STEP.INTRO) {
       // intro 대사 출력
       typeDialogue(introDialogues[currentIndex.value])
     } else if (localStep.value === STEP.QUESTION) {
+      // questionStep이 없을 경우
+      if (!localQuestionStep.value) {
+        localStorage.setItem('questionStep', '1')
+        localQuestionStep.value = '1'
+      }
       // question 대사 출력
       typeDialogue(questionDialogues[Number(localQuestionStep.value) - 1])
       const storedAnswers = localStorage.getItem('answers')
@@ -206,6 +216,8 @@ onMounted(() => {
   } else {
     localStorage.setItem('currentStep', STEP.INTRO)
     localStep.value = localStorage.getItem('currentStep') as STEP
+    localStorage.removeItem('answers')
+    localStorage.removeItem('questionStep')
     typeDialogue(introDialogues[currentIndex.value])
   }
 

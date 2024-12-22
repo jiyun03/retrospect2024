@@ -10,11 +10,13 @@
   <div class="font-neodgm mt-5 flex justify-center gap-5 text-2xl">
     <button
       class="rounded-full border-4 p-3 px-10 transition-[background] hover:bg-white/30 disabled:bg-blue-950 disabled:opacity-70"
-      @click="handleNext(Number(localQuestionStep) + 1)"
+      @click="handleNext(Number(localQuestionStep) - 1)"
+      :disabled="localQuestionStep === '1'"
     >
       이전질문
     </button>
     <button
+      v-if="localQuestionStep !== String(questionDialogues.length)"
       class="rounded-full border-4 p-3 px-10 transition-[background] hover:bg-white/30 disabled:bg-blue-950 disabled:opacity-70"
       @click="handleNext(Number(localQuestionStep) + 1)"
     >
