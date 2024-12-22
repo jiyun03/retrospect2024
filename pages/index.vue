@@ -1,12 +1,12 @@
 <template>
   <div v-if="isMounted" class="pt-16 md:pt-10">
     <!-- localStep : intro -->
-    <div v-if="localStep === STEP.INTRO" class="font-neodgm text-center">
+    <div v-if="localStep === STEP.INTRO" class="font-neodgm mb-20 text-center">
       <NuxtImg src="/img/decoration.png" class="mx-auto mb-4 w-20" />
       <h1 class="text-7xl">Goodbye<br />2024</h1>
       <button
         v-if="currentIndex >= introDialogues.length - 1 && !isTyping"
-        class="mt-5 rounded-full border-4 p-3 px-5 text-3xl leading-none transition-[background] hover:bg-white/30 md:px-10"
+        class="mt-5 rounded-full border-4 p-3 px-10 text-3xl leading-none transition-[background] hover:bg-white/30"
         @click="onStart"
       >
         Start
