@@ -4,7 +4,20 @@
 
 @layer base {
   html {
+    font-size: 14px;
     @apply text-white;
+  }
+
+  /* break point */
+  @screen md {
+    html {
+      font-size: 15px;
+    }
+  }
+  @screen xl {
+    html {
+      font-size: 16px;
+    }
   }
 }
 
