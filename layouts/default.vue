@@ -1,8 +1,12 @@
 <template>
-  <main class="bg-blue-100">
-    <div class="mx-auto h-dvh max-w-[1000px] bg-blue-950">
-      <slot />
+  <main class="h-dvh bg-blue-900/70">
+    <!-- container -->
+    <div class="mx-auto max-w-[1000px] py-5">
+      <div class="relative h-[calc(100vh-2.5rem)] overflow-hidden rounded-3xl bg-blue-950/70">
+        <slot />
+      </div>
     </div>
+    <!-- music -->
+    <Music />
   </main>
 </template>
-c

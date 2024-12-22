@@ -5,8 +5,8 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
   },
-  modules: ['@nuxtjs/tailwindcss'],
-  css: ['~/assets/css/main.css'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/image'],
+  css: ['~/assets/css/main.css', '~/assets/css/fonts.css'],
   postcss: {
     plugins: {
       tailwindcss: {},
