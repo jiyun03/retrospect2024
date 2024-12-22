@@ -6,7 +6,8 @@ export default defineNuxtConfig({
       title: 'Goodbye 2024',
       meta: [
         { name: 'og:title', content: 'Goodbye 2024' },
-        { name: 'og:image', content: '/img/santa_2.png' },
+        { name: 'og:image', content: '/img/meta.jpg' },
+        { name: 'twitter:image', content: '/img/meta.jpg' },
       ],
     },
   },
