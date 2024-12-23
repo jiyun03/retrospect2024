@@ -13,7 +13,7 @@
       </button>
     </div>
     <!-- localStep : question -->
-    <div v-else-if="localStep === STEP.QUESTION" class="mb-20 w-full p-5 text-center md:p-10">
+    <div v-else-if="localStep === STEP.QUESTION" class="mb-20 md:mb-0 w-full p-5 text-center md:p-10">
       <Navigation :localQuestionStep="localQuestionStep" :handleNext="handleNext" />
       <Question :localQuestionStep="localQuestionStep" :answer="answer" :handleAnswerChange="handleAnswerChange" :handleNext="handleNext" />
     </div>
