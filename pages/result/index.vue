@@ -16,7 +16,7 @@
               <p class="font-neodgm mb-5 flex gap-1 break-keep text-xl">
                 <span>{{ idx }}.</span> <span>{{ questionLists[idx - 1] }}</span>
               </p>
-              <p class="ml-6 whitespace-pre text-lg">{{ item }}</p>
+              <p class="ml-6 whitespace-break-spaces text-lg">{{ item }}</p>
             </div>
           </div>
         </div>
